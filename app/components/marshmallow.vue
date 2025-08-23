@@ -242,7 +242,7 @@ onBeforeUnmount(() => {
 
   /* Reduce font sizes for better readability on small screens */
   .content-section-title {
-    font-size: 3rem; /* Make the main title smaller */
+    font-size: 2rem; /* Make the main title smaller */
     padding: 15px 0;
   }
   
