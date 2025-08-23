@@ -237,7 +237,7 @@ onBeforeUnmount(() => {
   .two {
     left: auto; /* Remove the horizontal positioning */
     right: auto;
-    width: 90%; /* Take up most of the screen width */
+    width:100%; /* Take up most of the screen width */
   }
 
   /* Reduce font sizes for better readability on small screens */
