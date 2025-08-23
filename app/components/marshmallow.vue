@@ -6,9 +6,10 @@ import {createEmbers, animateEmbers} from '@/assets/src/createEmbers.js';
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { SplitText } from "gsap/SplitText";
+
 import { setupTextAnimations } from '@/assets/src/textAnimations.js';
 import { setupScrollAnimations } from '@/assets/src/scrollAnimations.js';
-
+import { loadMarshmallow } from '@/assets/src/loadMarshmallow.js';
 const modelContainer = ref(null);
 let scene, camera, renderer, model, animationId;
 const clock = new THREE.Clock();
@@ -26,30 +27,34 @@ function initThree() {
   renderer.setClearColor(0x000000, 0); // Transparent background
   modelContainer.value.appendChild(renderer.domElement);
 
-  const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
-  scene.add(ambientLight);
-  const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
-  directionalLight.position.set(5, 5, 5);
-  scene.add(directionalLight);
-  createEmbers(scene);
-  const loader = new GLTFLoader();
-  loader.load("/models/gltf/marshmallow.glb", (gltf) => {
-    model = gltf.scene;
-    const box = new THREE.Box3().setFromObject(model);
-    const center = new THREE.Vector3();
-    box.getCenter(center);
-    model.position.sub(center); // Center the model
-    model.position.set(0, 0, 0);
-    model.scale.set(0.5, 0.5, 0.5);
-
-    scene.add(model);
-    setupScrollAnimations(model);
-    setupTextAnimations();
-    ScrollTrigger.refresh();
-  }, undefined, (error) => {
-    console.error("An error happened while loading the model:", error);
-  });
   
+  createEmbers(scene);
+
+  const loader = new GLTFLoader();
+      loader.load("/models/gltf/marshmallow.glb", (gltf) => {
+          model = gltf.scene;
+  
+          model.traverse((child) => {
+          if (child.isMesh) {
+              child.castShadow = true;
+              child.receiveShadow = true;
+          }
+          });
+          const box = new THREE.Box3().setFromObject(model);
+          const center = new THREE.Vector3();
+          box.getCenter(center);
+          model.position.sub(center); // Center the model
+          model.position.set(0, 0, 0);
+          model.scale.set(0.5, 0.5, 0.5);
+  
+          scene.add(model);
+          setupScrollAnimations(model);
+          setupTextAnimations();
+          ScrollTrigger.refresh();
+      }, undefined, (error) => {
+          console.error("An error happened while loading the model:", error);
+      });
+  loadMarshmallow(scene,model);  
 }
 
 function animate() {
