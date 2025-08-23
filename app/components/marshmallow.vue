@@ -8,9 +8,6 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { SplitText } from "gsap/SplitText";
 
-gsap.registerPlugin(ScrollTrigger);
-gsap.registerPlugin(SplitText);
-
 const modelContainer = ref(null);
 let scene, camera, renderer, model, animationId;
 const clock = new THREE.Clock();
@@ -291,6 +288,8 @@ function onWindowResize() {
 onMounted(async () => {
   await nextTick();
   if (modelContainer.value) {
+    gsap.registerPlugin(ScrollTrigger);
+    gsap.registerPlugin(SplitText);
     initThree();
     window.addEventListener('resize', onWindowResize);
   }
