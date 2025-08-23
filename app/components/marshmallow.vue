@@ -231,4 +231,28 @@ onBeforeUnmount(() => {
 
 .section-6 h2 {color: #E8F5E9;}
 .section-6 span {color: rgba(240, 255, 245, 0.9);}
+@media (max-width: 768px) {
+  /* Center the content blocks and give them more width */
+  .one,
+  .two {
+    left: auto; /* Remove the horizontal positioning */
+    right: auto;
+    width: 90%; /* Take up most of the screen width */
+  }
+
+  /* Reduce font sizes for better readability on small screens */
+  .content-section-title {
+    font-size: 3rem; /* Make the main title smaller */
+    padding: 15px 0;
+  }
+  
+  .content-section h2 {
+    font-size: 2.5rem; /* Reduce section titles */
+  }
+  
+  .content span {
+    font-size: 1.1rem; /* Make the body text much more readable */
+    line-height: 1.6; /* Increase line height for small text */
+  }
+}
 </style>
