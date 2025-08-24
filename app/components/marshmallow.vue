@@ -167,6 +167,7 @@ onBeforeUnmount(() => {
 .content {
   position:relative;
   display:flex;
+  z-index:12;
   flex-direction:column;
 }
 .word, .line, .char{
