@@ -121,21 +121,22 @@ onBeforeUnmount(() => {
               </div>
           </section>
           <section class="content-section section-4">
-            <div class="content two">
-              <h2>An American Invention</h2>
-              <span class="span4">The mass production of marshmallows was revolutionized in 1948 by an American, Alex Doumak. He invented and patented the extrusion process, where the marshmallow mixture is pushed through tubes, cut into pieces, cooled, and packaged.</span>
-            </div>
+              <div class="content two">
+                  <h2>An American Invention</h2>
+                  <span class="span4">The mass production of marshmallows was revolutionized in 1948 by an American, Alex Doumak. He invented and patented the extrusion process, where the marshmallow mixture is pushed through tubes, cut into pieces, cooled, and packaged.</span>
+              </div>
           </section>
           <section class="content-section section-5">
-            <div class="content one">
-              <h2>Mostly Air</h2>
-              <span class="span5">Marshmallows are a type of foam, consisting of about 50% air. The four main ingredients are sugar, water, air, and a whipping agent like gelatin.</span>
-            </div>
+              <div class="content one">
+                  <h2>Mostly Air</h2>
+                  <span class="span5">Marshmallows are a type of foam, consisting of about 50% air. The four main ingredients are sugar, water, air, and a whipping agent like gelatin.</span>
+              </div>
           </section>
           <section class="content-section section-6">
-            <div class="content">
-              <h2 style="width:100%; font-size:20rem; padding:0; margin:0; text-shadow:none;">Share Your S'more Story</h2>                  
-            </div>
+              <div class="content two">
+                  <h2>The "S'more" Story</h2>
+                  <span class="span6">The first documented recipe for a s'more appeared in the 1927 Girl Scout handbook. The name is believed to be a contraction of the phrase "some more." More than half of all marshmallows sold during the summer are toasted over a fire, often to make this iconic campfire treat.</span>
+              </div>
           </section>
       </main>
     </client-only>

@@ -26,15 +26,15 @@ export function setupScrollAnimations(model) {
                 scrub: 1,
             }
         });
-        gsap.to(model.scale, {
-            x: 1.5, y: 1.5, z: 1.5,
-            scrollTrigger: {
-                trigger: ".section-3",
-                start: "top bottom",
-                end: "bottom top",
-                scrub: 1,
-            }
-        });
+        // gsap.to(model.scale, {
+        //     x: 1.5, y: 1.5, z: 1.5,
+        //     scrollTrigger: {
+        //         trigger: ".section-3",
+        //         start: "top bottom",
+        //         end: "bottom top",
+        //         scrub: 1,
+        //     }
+        // });
         gsap.to(model.position, {
             x: -3,
             y: 2,
