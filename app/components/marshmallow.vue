@@ -6,14 +6,14 @@ import {createEmbers, animateEmbers} from '@/assets/src/createEmbers.js';
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { SplitText } from "gsap/SplitText";
-
+import { KTX2Loader } from 'three/examples/jsm/loaders/KTX2Loader.js';
+import { MeshoptDecoder } from 'three/examples/jsm/libs/meshopt_decoder.module.js';
 import { setupTextAnimations } from '@/assets/src/textAnimations.js';
 import { setupScrollAnimations } from '@/assets/src/scrollAnimations.js';
 import { loadMarshmallow } from '@/assets/src/loadMarshmallow.js';
 const modelContainer = ref(null);
 let scene, camera, renderer, model, animationId;
 const clock = new THREE.Clock();
-
 
 function initThree() {
   scene = new THREE.Scene();
@@ -26,34 +26,36 @@ function initThree() {
   renderer.setSize(window.innerWidth, window.innerHeight);
   renderer.setClearColor(0x000000, 0); // Transparent background
   modelContainer.value.appendChild(renderer.domElement);
-
-  
   createEmbers(scene);
-
   const loader = new GLTFLoader();
-      loader.load("/models/gltf/marshmallow.glb", (gltf) => {
-          model = gltf.scene;
-  
-          model.traverse((child) => {
-          if (child.isMesh) {
-              child.castShadow = true;
-              child.receiveShadow = true;
-          }
-          });
-          const box = new THREE.Box3().setFromObject(model);
-          const center = new THREE.Vector3();
-          box.getCenter(center);
-          model.position.sub(center); // Center the model
-          model.position.set(0, 0, 0);
-          model.scale.set(0.5, 0.5, 0.5);
-  
-          scene.add(model);
-          setupScrollAnimations(model);
-          setupTextAnimations();
-          ScrollTrigger.refresh();
-      }, undefined, (error) => {
-          console.error("An error happened while loading the model:", error);
-      });
+  const ktx2Loader = new KTX2Loader();
+  ktx2Loader.setTranscoderPath('/basis/');
+  ktx2Loader.detectSupport(renderer);
+  loader.setKTX2Loader(ktx2Loader);
+  loader.setMeshoptDecoder(MeshoptDecoder);
+  loader.load("/models/gltf/marshmallow_ktx3.glb", (gltf) => {
+    model = gltf.scene;
+
+    model.traverse((child) => {
+    if (child.isMesh) {
+      child.castShadow = true;
+      child.receiveShadow = true;
+    }
+    });
+    const box = new THREE.Box3().setFromObject(model);
+    const center = new THREE.Vector3();
+    box.getCenter(center);
+    model.position.sub(center); // Center the model
+    model.position.set(0, 0, 0);
+    model.scale.set(0.5, 0.5, 0.5);
+
+    scene.add(model);
+    setupScrollAnimations(model);
+    setupTextAnimations();
+    ScrollTrigger.refresh();
+  }, undefined, (error) => {
+    console.error("An error happened while loading the model:", error);
+  });
   loadMarshmallow(scene,model);  
 }
 
@@ -119,27 +121,27 @@ onBeforeUnmount(() => {
               </div>
           </section>
           <section class="content-section section-4">
-              <div class="content two">
-                  <h2>An American Invention</h2>
-                  <span class="span4">The mass production of marshmallows was revolutionized in 1948 by an American, Alex Doumak. He invented and patented the extrusion process, where the marshmallow mixture is pushed through tubes, cut into pieces, cooled, and packaged.</span>
-              </div>
+            <div class="content two">
+              <h2>An American Invention</h2>
+              <span class="span4">The mass production of marshmallows was revolutionized in 1948 by an American, Alex Doumak. He invented and patented the extrusion process, where the marshmallow mixture is pushed through tubes, cut into pieces, cooled, and packaged.</span>
+            </div>
           </section>
           <section class="content-section section-5">
-              <div class="content one">
-                  <h2>Mostly Air</h2>
-                  <span class="span5">Marshmallows are a type of foam, consisting of about 50% air. The four main ingredients are sugar, water, air, and a whipping agent like gelatin.</span>
-              </div>
+            <div class="content one">
+              <h2>Mostly Air</h2>
+              <span class="span5">Marshmallows are a type of foam, consisting of about 50% air. The four main ingredients are sugar, water, air, and a whipping agent like gelatin.</span>
+            </div>
           </section>
           <section class="content-section section-6">
-              <div class="content two">
-                  <h2>The "S'more" Story</h2>
-                  <span class="span6">The first documented recipe for a s'more appeared in the 1927 Girl Scout handbook. The name is believed to be a contraction of the phrase "some more." More than half of all marshmallows sold during the summer are toasted over a fire, often to make this iconic campfire treat.</span>
-              </div>
+            <div class="content">
+              <h2 style="width:100%; font-size:20rem; padding:0; margin:0; text-shadow:none;">Share Your S'more Story</h2>                  
+            </div>
           </section>
       </main>
     </client-only>
   </template>
 <style >
+
 .model-container {
   position: fixed;
   top: 0;
@@ -186,6 +188,11 @@ onBeforeUnmount(() => {
   font-size:2rem;
   font-weight:medium;
   text-shadow:2px 2px 8px rgba(0,0,0,0.5);
+}
+.full-width-height{
+  width:100%;
+  height:100%;
+  font-size:9rem;
 }
 .content-section-title {
   height: 130px; 
@@ -241,7 +248,6 @@ onBeforeUnmount(() => {
     width:100%; /* Take up most of the screen width */
   }
 
-  /* Reduce font sizes for better readability on small screens */
   .content-section-title {
     font-size: 2rem; /* Make the main title smaller */
     padding: 15px 0;
