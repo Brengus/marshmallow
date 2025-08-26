@@ -161,10 +161,10 @@ onBeforeUnmount(() => {
   <client-only>
     <div ref="container" class="modeli-container">
       <button class="carousel-button prev" @click="prevSlide">
-        <img src="/left.svg" alt="Previous" style="width:100%; height:100%;"/>
+        <img src="/left.png" alt="Previous" style="width:100%; height:100%;"/>
       </button>
       <button class="carousel-button next" @click="nextSlide">
-        <img src="/right.svg" alt="Next" style="width:100%; height:100%;"/>
+        <img src="/right.png" alt="Next" style="width:100%; height:100%;"/>
       </button>
     </div>
   </client-only>
