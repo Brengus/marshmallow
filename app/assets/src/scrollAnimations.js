@@ -9,7 +9,7 @@ export function setupScrollAnimations(model) {
     "(min-width: 768px)": function() {
         gsap.to(model.position, {
             x: 3,
-            y: 2,
+            y: 0,
             scrollTrigger: {
                 trigger: ".section-1",
                 start: "top bottom",
@@ -37,7 +37,7 @@ export function setupScrollAnimations(model) {
         // });
         gsap.to(model.position, {
             x: -3,
-            y: 2,
+            y: 1,
             scrollTrigger: {
                 trigger: ".section-4",
                 start: "top bottom",
@@ -104,6 +104,8 @@ export function setupScrollAnimations(model) {
             }
         });
     },
+
+
 
     "(max-width: 767px)": function() {
       gsap.set(model.position, { x: 0 });

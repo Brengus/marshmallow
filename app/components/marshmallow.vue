@@ -12,7 +12,7 @@ import { setupTextAnimations } from '@/assets/src/textAnimations.js';
 import { setupScrollAnimations } from '@/assets/src/scrollAnimations.js';
 import { loadMarshmallow } from '@/assets/src/loadMarshmallow.js';
 const modelContainer = ref(null);
-let scene, camera, renderer, model, animationId;
+let scene, camera, renderer, model, animationId, modelGroup;
 const clock = new THREE.Clock();
 
 function initThree() {
@@ -26,6 +26,9 @@ function initThree() {
   renderer.setSize(window.innerWidth, window.innerHeight);
   renderer.setClearColor(0x000000, 0); // Transparent background
   modelContainer.value.appendChild(renderer.domElement);
+
+  modelGroup = new THREE.Group();
+  scene.add(modelGroup);
   createEmbers(scene);
   const loader = new GLTFLoader();
   const ktx2Loader = new KTX2Loader();
@@ -46,12 +49,23 @@ function initThree() {
     const center = new THREE.Vector3();
     box.getCenter(center);
     model.position.sub(center); // Center the model
-    model.position.set(0, 0, 0);
-    model.scale.set(0.5, 0.5, 0.5);
+    
 
-    scene.add(model);
-    setupScrollAnimations(model);
+    modelGroup.add(model);
+    modelGroup.scale.set(0.5, 0.5, 0.5);
+
+    setupScrollAnimations(modelGroup);
     setupTextAnimations();
+    ScrollTrigger.create({
+        trigger: ".section-7",
+        start: "20% bottom", 
+        onEnter: () => {
+          modelGroup.visible = false;
+        },
+        onLeaveBack: () => {
+          modelGroup.visible = true;
+        }
+    });
     ScrollTrigger.refresh();
   }, undefined, (error) => {
     console.error("An error happened while loading the model:", error);
@@ -64,9 +78,7 @@ function animate() {
   const delta = clock.getDelta();
   const elapsedTime = clock.getElapsedTime();
   if(model){
-    const levitationAmplitude = 0.1;
-    const levitationSpeed = 1.5;
-    model.position.y = Math.sin(elapsedTime * levitationSpeed) * levitationAmplitude; // Levitate up and down
+    model.position.y = Math.sin(elapsedTime * 1.5) * 0.1; // Levitate up and down
   }
     animateEmbers(delta,elapsedTime);
   renderer.render(scene, camera);
@@ -138,10 +150,13 @@ onBeforeUnmount(() => {
                   <span class="span6">The first documented recipe for a s'more appeared in the 1927 Girl Scout handbook. The name is believed to be a contraction of the phrase "some more." More than half of all marshmallows sold during the summer are toasted over a fire, often to make this iconic campfire treat.</span>
               </div>
           </section>
+          <section class="content-section section-7">
+            <carousel-three />
+          </section>
       </main>
     </client-only>
   </template>
-<style >
+<style scoped>
 
 .model-container {
   position: fixed;
