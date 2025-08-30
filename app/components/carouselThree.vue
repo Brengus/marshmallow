@@ -199,7 +199,10 @@ onBeforeUnmount(() => {
 :global(html), :global(body) {
   margin: 0;
   padding: 0;
-  overflow-x: hidden;
+}
+
+body{
+  overflow-x:hidden;
 }
 
 :deep(.element-one) {
