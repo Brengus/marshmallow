@@ -55,7 +55,7 @@ function initThree() {
     modelGroup.scale.set(0.5, 0.5, 0.5);
 
     setupScrollAnimations(modelGroup);
-    setupTextAnimations();
+    // setupTextAnimations();
     ScrollTrigger.create({
         trigger: ".section-7",
         start: "20% bottom", 
