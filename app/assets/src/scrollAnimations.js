@@ -308,5 +308,5 @@ export function setupScrollAnimations(model) {
                 }
             });
         }
-  });
+    });
 }

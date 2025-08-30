@@ -93,8 +93,11 @@ function onWindowResize() {
 onMounted(async () => {
   await nextTick();
   if (modelContainer.value) {
-    gsap.registerPlugin(ScrollTrigger);
-    gsap.registerPlugin(SplitText);
+    gsap.registerPlugin(ScrollTrigger,SplitText);
+    if(window.innerWidth < 768){
+      ScrollTrigger.normalizeScroll(true);
+    }
+    
     initThree();
     animate();
     window.addEventListener('resize', onWindowResize);
@@ -104,6 +107,7 @@ onMounted(async () => {
 onBeforeUnmount(() => {
   if (animationId) cancelAnimationFrame(animationId);
   window.removeEventListener('resize', onWindowResize);
+  ScrollTrigger.normalizeScroll(false);
   ScrollTrigger.getAll().forEach(t => t.kill());
 });
 </script>
