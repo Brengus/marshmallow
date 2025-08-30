@@ -267,6 +267,8 @@ onBeforeUnmount(() => {
 }
 @media (max-width: 768px) {
   :deep(.carousel-button) {
+    width:4rem;
+    height:4rem;
     padding: 0.8rem 1.2rem;
     font-size: 0.9rem;
   }
