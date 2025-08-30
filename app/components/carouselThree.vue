@@ -81,8 +81,8 @@ const rotationTween1 = gsap.to(".element-two", {
   paused: true        // IMPORTANT: Start in a paused state
 });
 ScrollTrigger.create({
-  trigger: ".section-6",  // The trigger is your sixth section
-  start: "top center",    // Start when the top of section 6 hits the middle of the screen
+  trigger: ".section-7",  // The trigger is your sixth section
+  start: "top bottom",    // Start when the top of section 6 hits the middle of the screen
   onEnter: () => {rotationTween.play(); rotationTween1.play();},      // When it enters the viewport, play the animation
   onLeave: () => {rotationTween.pause(); rotationTween1.pause();},     // When it leaves, pause the animation
   onEnterBack: () => {rotationTween.play(); rotationTween1.play();},  // Also play when scrolling back up into view
