@@ -95,7 +95,11 @@ onMounted(async () => {
   if (modelContainer.value) {
     gsap.registerPlugin(ScrollTrigger,SplitText);
     if(window.innerWidth < 768){
-      ScrollTrigger.normalizeScroll(true);
+      ScrollTrigger.normalizeScroll({
+        allowNestedScroll: true,
+        // This is the magic property for touch devices
+        lockAxis: false
+      });
     }
     
     initThree();
