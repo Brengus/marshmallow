@@ -97,7 +97,6 @@ onMounted(async () => {
     if(window.innerWidth < 768){
       ScrollTrigger.normalizeScroll({
         allowNestedScroll: true,
-        // This is the magic property for touch devices
         lockAxis: false
       });
     }

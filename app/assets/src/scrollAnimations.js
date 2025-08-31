@@ -20,90 +20,90 @@ export function setupScrollAnimations(model) {
 
     }, (context) => {
         const { isDesktop, isMobile, reduceMotion } = context.conditions;
-        if (isDesktop) {
-            gsap.from(span1.words, {
-                y: 60,
-                opacity: 0,
-                rotationX: -90, // Flips the words in from the bottom
-                stagger: {
-                each: 0.05,
-                from: "start" // Creates the wave effect from left to right
-                }
-            });
+        gsap.from(span1.words, {
+            y: 60,
+            opacity: 0,
+            rotationX: -90, // Flips the words in from the bottom
+            stagger: {
+            each: 0.05,
+            from: "start" // Creates the wave effect from left to right
+            }
+        });
 
-            gsap.from(span2.words, {
-                scrollTrigger:{
-                trigger: ".section-2",
-                start: "top 60%",
-                end: "center 60%",
-                scrub: 1,
-                },
-                scale: 0, // Start scaled to nothing
-                autoAlpha: 0,
-                ease: "back.out(1.7)", // This ease creates the bouncy "pop"
-                stagger: {
-                amount: 0.05,
-                from: "random",
-                }
-            });
-            gsap.from(span3.lines, {
-                scrollTrigger:{
-                trigger: ".section-3",
-                start: "top 60%",
-                end: "center 60%",
-                scrub: 1,
-                },
-                x: -200, // Slide the entire line in from the left
-                autoAlpha: 0,
-                stagger: {
-                amount: 0.1
-                }
-            });
-            gsap.from(span4.words, {
-                scrollTrigger:{
-                trigger: ".section-4",
-                start: "top 60%",
-                end: "center 60%",
-                scrub: 1,
-                },
-                y: 80,
-                rotationZ: 180, // Each word does a 180-degree spin
-                autoAlpha: 0,
-                stagger: {
-                amount: 0.1,
-                from: "center" // Animation radiates from the center word
-                }
-            });
-            gsap.from(span5.words, {
-                scrollTrigger:{
-                trigger: ".section-5",
-                start: "top 60%",
-                end: "center 60%",
-                scrub: 2, // A longer scrub makes it feel slower and floatier
-                },
-                y: 150, // Start far below
-                autoAlpha: 0,
-                ease: "power2.out", // A smooth, decelerating ease
-                stagger: {
-                amount: 0.1,
-                from: "random"
-                }
-            });
-            gsap.from(span6.words, {
-                scrollTrigger:{
-                trigger: ".section-6",
-                start: "top 60%",
-                end: "center 60%",
-                scrub: 1,
-                },
-                y: 50,
-                autoAlpha: 0,
-                color: "#ff9a9e", // Start with a warm "toasted" color
-                stagger: {
-                amount: 0.1,
-                from: "end" // A wave from right to left for a finishing feel
-                }
-            });
+        gsap.from(span2.words, {
+            scrollTrigger:{
+            trigger: ".section-2",
+            start: "top 60%",
+            end: "center 60%",
+            scrub: 1,
+            },
+            scale: 0, // Start scaled to nothing
+            autoAlpha: 0,
+            ease: "back.out(1.7)", // This ease creates the bouncy "pop"
+            stagger: {
+            amount: 0.05,
+            from: "random",
+            }
+        });
+        gsap.from(span3.lines, {
+            scrollTrigger:{
+            trigger: ".section-3",
+            start: "top 60%",
+            end: "center 60%",
+            scrub: 1,
+            },
+            x: -200, // Slide the entire line in from the left
+            autoAlpha: 0,
+            stagger: {
+            amount: 0.1
+            }
+        });
+        gsap.from(span4.words, {
+            scrollTrigger:{
+            trigger: ".section-4",
+            start: "top 60%",
+            end: "center 60%",
+            scrub: 1,
+            },
+            y: 80,
+            rotationZ: 180, // Each word does a 180-degree spin
+            autoAlpha: 0,
+            stagger: {
+            amount: 0.1,
+            from: "center" // Animation radiates from the center word
+            }
+        });
+        gsap.from(span5.words, {
+            scrollTrigger:{
+            trigger: ".section-5",
+            start: "top 60%",
+            end: "center 60%",
+            scrub: 2, // A longer scrub makes it feel slower and floatier
+            },
+            y: 150, // Start far below
+            autoAlpha: 0,
+            ease: "power2.out", // A smooth, decelerating ease
+            stagger: {
+            amount: 0.1,
+            from: "random"
+            }
+        });
+        gsap.from(span6.words, {
+            scrollTrigger:{
+            trigger: ".section-6",
+            start: "top 60%",
+            end: "center 60%",
+            scrub: 1,
+            },
+            y: 50,
+            autoAlpha: 0,
+            color: "#ff9a9e", // Start with a warm "toasted" color
+            stagger: {
+            amount: 0.1,
+            from: "end" // A wave from right to left for a finishing feel
+            }
+        });
+        if (isDesktop) { 
             gsap.to(model.position, {
                 x: 3,
                 y: 0,
@@ -195,89 +195,6 @@ export function setupScrollAnimations(model) {
         }
         if (isMobile) {
             gsap.set(model.position, { x: 0 });
-            gsap.from(span1.words, {
-                y: 60,
-                opacity: 0,
-                rotationX: -90, // Flips the words in from the bottom
-                stagger: {
-                each: 0.05,
-                from: "start" // Creates the wave effect from left to right
-                }
-            });
-
-            gsap.from(span2.words, {
-                scrollTrigger:{
-                trigger: ".section-2",
-                start: "top 60%",
-                end: "center 60%",
-                scrub: 1,
-                },
-                scale: 0, // Start scaled to nothing
-                autoAlpha: 0,
-                ease: "back.out(1.7)", // This ease creates the bouncy "pop"
-                stagger: {
-                amount: 0.05,
-                from: "random",
-                }
-            });
-            gsap.from(span3.lines, {
-                scrollTrigger:{
-                trigger: ".section-3",
-                start: "top 60%",
-                end: "center 60%",
-                scrub: 1,
-                },
-                x: -200, // Slide the entire line in from the left
-                autoAlpha: 0,
-                stagger: {
-                amount: 0.1
-                }
-            });
-            gsap.from(span4.words, {
-                scrollTrigger:{
-                trigger: ".section-4",
-                start: "top 60%",
-                end: "center 60%",
-                scrub: 1,
-                },
-                y: 80,
-                rotationZ: 180, // Each word does a 180-degree spin
-                autoAlpha: 0,
-                stagger: {
-                amount: 0.1,
-                from: "center" // Animation radiates from the center word
-                }
-            });
-            gsap.from(span5.words, {
-                scrollTrigger:{
-                trigger: ".section-5",
-                start: "top 60%",
-                end: "center 60%",
-                scrub: 2, // A longer scrub makes it feel slower and floatier
-                },
-                y: 150, // Start far below
-                autoAlpha: 0,
-                ease: "power2.out", // A smooth, decelerating ease
-                stagger: {
-                amount: 0.1,
-                from: "random"
-                }
-            });
-            gsap.from(span6.words, {
-                scrollTrigger:{
-                trigger: ".section-6",
-                start: "top 60%",
-                end: "center 60%",
-                scrub: 1,
-                },
-                y: 50,
-                autoAlpha: 0,
-                color: "#ff9a9e", // Start with a warm "toasted" color
-                stagger: {
-                amount: 0.1,
-                from: "end" // A wave from right to left for a finishing feel
-                }
-            });
             gsap.to(model.rotation, {
                 y: Math.PI * 4,
                 scrollTrigger: {

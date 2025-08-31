@@ -18,8 +18,6 @@ const nextSlide = () => {
   goToSlide(1);
 };
 
-
-
 function goToSlide(direction) {
     if (isAnimating || models.length < 2) return;
     isAnimating = true;
@@ -94,7 +92,6 @@ function init(){
   const loader = new GLTFLoader();
   const ktx2Loader = new KTX2Loader();
   scene = new THREE.Scene();
-  // scene.background = new THREE.Color('#EAE0D5');
   scene.background = null;
 
   camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
@@ -104,11 +101,23 @@ function init(){
   renderer.setClearColor(0x000000, 0); // Transparent background
   container.value.appendChild(renderer.domElement);
 
-  const ambientLight = new THREE.AmbientLight(0xFFFFFF, 0.8);
+  const keyLight = new THREE.DirectionalLight(0xfff8e7, 3.5); // A bright, slightly warm white
+  keyLight.position.set(5, 5, 5);
+  keyLight.lookAt(0, 0, 0); // Make sure it's pointing at the center
+  scene.add(keyLight);
+
+  const fillLight = new THREE.DirectionalLight(0xe7f8ff, 0.4); // A very soft, cool white
+  fillLight.position.set(-5, 2, 5);
+  fillLight.lookAt(0, 0, 0);
+  scene.add(fillLight);
+
+  const rimLight = new THREE.DirectionalLight(0xffd6b3, 1.0); // A warm, golden color
+  rimLight.position.set(2, 3, -8); // Positioned behind the scene
+  rimLight.lookAt(0, 0, 0);
+  scene.add(rimLight);
+
+  const ambientLight = new THREE.AmbientLight(0x404040, 0.5); // A soft gray, not too bright
   scene.add(ambientLight);
-  const dirLight = new THREE.DirectionalLight(0xFFFFFF, 2.0);
-  dirLight.position.set(3, 4, 5);
-  scene.add(dirLight);
 
   ktx2Loader.setTranscoderPath('/basis/');
   ktx2Loader.detectSupport(renderer);
@@ -116,32 +125,47 @@ function init(){
   loader.setMeshoptDecoder(MeshoptDecoder);
 
   const modelPaths = [
-    '/models/gltf/reeses_ktx2.glb', // Example paths
-    '/models/gltf/mms_ktx2.glb',
+    { path: '/models/gltf/reeses_ktx2.glb', scale: 8, rotation: { x: 90, y: 0, z: 0 }, nameTarget: 'prop_reeses_pieces' },
+    { path: '/models/gltf/mms_ktx3.glb', scale: 2, rotation: { x: 0, y: 0, z: 0 }, nameTarget: 'M&M_bag_0' },
+    { path: '/models/gltf/marshmallow1_ktx3.glb', scale: 0.05, rotation: { x: 0, y: 90, z: 0 }, nameTarget: 'Object_3' , nameTarget2: 'Object_2', position:{x:0,y:-3,z:0}},
+    { path: '/models/gltf/marshmallow3_ktx2.glb', scale: 0.02, rotation: { x: 45, y: 0, z: 0 }, nameTarget: 'node-0_0' },
+    { path: '/models/gltf/marshmallow4_ktx2.glb', scale: 0.5, rotation: { x: 45, y: 0, z: 0 }, nameTarget: 'smoresfbx' }
   ];
 
-  const loadPromises = modelPaths.map(path => loader.loadAsync(path));
+  const loadPromises = modelPaths.map(path => loader.loadAsync(path.path));
   carouselGroup = new THREE.Group();
   scene.add(carouselGroup);
 
   Promise.all(loadPromises).then(gltfs => {
     gltfs.forEach((gltf, index) => {
       const model = gltf.scene;
+      console.log(model);
+      const data = modelPaths[index];
       const box = new THREE.Box3().setFromObject(model);
       const center = new THREE.Vector3();
       box.getCenter(center);
       model.position.sub(center);
+      
+      const rotationTarget = data.nameTarget ? model.getObjectByName(data.nameTarget) : model;
+      if(data.nameTarget2){
+        model.traverse((child)=>{
+          if(child.isMesh && child.name === data.nameTarget2){
+            child.visible = false;
+          }
+        })
+      }
+      if (rotationTarget) {
+        if(data.position){
+          rotationTarget.position.set(data.position.x,data.position.y,data.position.z);
+        }
+        rotationTarget.rotation.x += THREE.MathUtils.degToRad(data.rotation.x);
+        rotationTarget.rotation.y += THREE.MathUtils.degToRad(data.rotation.y);
+        rotationTarget.rotation.z += THREE.MathUtils.degToRad(data.rotation.z);
+      }
       carouselGroup.add(model); 
-      model.scale.set(3, 3, 3);
+      model.scale.set(data.scale, data.scale, data.scale);
       model.position.set(0, 0, 0);
       model.visible = (index === 0);
-      const reesesModel = model.getObjectByName('prop_reeses_pieces');
-      if (reesesModel) {
-        reesesModel.rotation.x += THREE.MathUtils.degToRad(90);
-        model.scale.set(8,8,8);
-      } else {
-        console.log("This model is not the Reese's model, skipping custom rotation.");
-      }
       model.lookAt(0, 0, 0);
       models.push(model);
     });
