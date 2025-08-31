@@ -8,25 +8,20 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { SplitText } from "gsap/SplitText";
 import { KTX2Loader } from 'three/examples/jsm/loaders/KTX2Loader.js';
 import { MeshoptDecoder } from 'three/examples/jsm/libs/meshopt_decoder.module.js';
-import { setupTextAnimations } from '@/assets/src/textAnimations.js';
 import { setupScrollAnimations } from '@/assets/src/scrollAnimations.js';
 import { loadMarshmallow } from '@/assets/src/loadMarshmallow.js';
 const modelContainer = ref(null);
 let scene, camera, renderer, model, animationId, modelGroup;
 const clock = new THREE.Clock();
-
-function initThree() {
+const initThree = () => {
   scene = new THREE.Scene();
-
   camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
   camera.position.z = 5;
   camera.position.y = 1;
-
   renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
   renderer.setSize(window.innerWidth, window.innerHeight);
   renderer.setClearColor(0x000000, 0); // Transparent background
   modelContainer.value.appendChild(renderer.domElement);
-
   modelGroup = new THREE.Group();
   scene.add(modelGroup);
   createEmbers(scene);
@@ -38,133 +33,78 @@ function initThree() {
   loader.setMeshoptDecoder(MeshoptDecoder);
   loader.load("/models/gltf/marshmallow_ktx3.glb", (gltf) => {
     model = gltf.scene;
-
     model.traverse((child) => {
-    if (child.isMesh) {
-      child.castShadow = true;
-      child.receiveShadow = true;
-    }
+      if (child.isMesh) {
+        child.castShadow = true;
+        child.receiveShadow = true;
+      }
     });
     const box = new THREE.Box3().setFromObject(model);
     const center = new THREE.Vector3();
     box.getCenter(center);
     model.position.sub(center); // Center the model
-    
-
     modelGroup.add(model);
     modelGroup.scale.set(0.5, 0.5, 0.5);
-
     setupScrollAnimations(modelGroup);
-    // setupTextAnimations();
-    ScrollTrigger.create({
-        trigger: ".section-7",
-        start: "20% bottom", 
-        onEnter: () => {
-          modelGroup.visible = false;
-        },
-        onLeaveBack: () => {
-          modelGroup.visible = true;
-        }
-    });
+    ScrollTrigger.create({trigger: ".section-7",start: "20% bottom", onEnter: () => {modelGroup.visible = false},onLeaveBack: () => {modelGroup.visible = true}});
     ScrollTrigger.refresh();
-  }, undefined, (error) => {
-    console.error("An error happened while loading the model:", error);
-  });
+  }, undefined, (error) => {console.error("An error happened while loading the model:", error)});
   loadMarshmallow(scene,model);  
 }
-
-function animate() {
+const animate = () => {
   animationId = requestAnimationFrame(animate);
   const delta = clock.getDelta();
   const elapsedTime = clock.getElapsedTime();
-  if(model){
-    model.position.y = Math.sin(elapsedTime * 1.5) * 0.1; // Levitate up and down
-  }
-    animateEmbers(delta,elapsedTime);
+  if(model) model.position.y = Math.sin(elapsedTime * 1.5) * 0.1; 
+  animateEmbers(delta,elapsedTime);
   renderer.render(scene, camera);
 }
-
-function onWindowResize() {
+const onWindowResize = () => {
   camera.aspect = window.innerWidth / window.innerHeight;
   camera.updateProjectionMatrix();
   renderer.setSize(window.innerWidth, window.innerHeight);
 }
-
 onMounted(async () => {
   await nextTick();
   if (modelContainer.value) {
     gsap.registerPlugin(ScrollTrigger,SplitText);
-    if(window.innerWidth < 768){
-      ScrollTrigger.normalizeScroll({
-        allowNestedScroll: true,
-        lockAxis: false
-      });
-    }
-    
+    if(window.innerWidth < 768) ScrollTrigger.normalizeScroll({ allowNestedScroll: true, lockAxis: false });
     initThree();
     animate();
     window.addEventListener('resize', onWindowResize);
   }
 });
-
 onBeforeUnmount(() => {
   if (animationId) cancelAnimationFrame(animationId);
   window.removeEventListener('resize', onWindowResize);
   ScrollTrigger.normalizeScroll(false);
   ScrollTrigger.getAll().forEach(t => t.kill());
 });
+const texts = [
+  { classMain: "one", class: 'span1' , section: "section-1" , header: "A Treat for Royalty" , text: "The history of marshmallows dates back to ancient Egypt around 2000 B.C. The treat was made by extracting sap from the mallow plant and mixing it with honey and nuts." },
+  { classMain: "one", class: 'span2' , section: "section-2" , header: "From Marsh Plant to Modern Sweet" , text: "The name \"marshmallow\" comes from the mallow plant (Althaea officinalis), which grows wild in marshes. Originally, the key ingredient was the sap from this plant's root." },
+  { classMain: "one", class: 'span3' , section: "section-3" , header: "A French Makeover" , text: "In the 1800s, French confectioners began whipping the mallow root sap with sugar and egg whites to create a fluffy, molded candy called Pâte de Guimauve." },
+  { classMain: "two", class: 'span4' , section: "section-4" , header: "An American Invention" , text: "The mass production of marshmallows was revolutionized in 1948 by an American, Alex Doumak. He invented and patented the extrusion process, where the marshmallow mixture is pushed through tubes, cut into pieces, cooled, and packaged." },
+  { classMain: "one", class: 'span5' , section: "section-5" , header: "The Science of Marshmallows" , text: "Marshmallows are a type of foam, consisting of about 50% air. The four main ingredients are sugar, water, air, and a whipping agent like gelatin." },
+  { classMain: "two", class: 'span6' , section: "section-6" , header: "The Birth of a Campfire Classic" , text: "The first documented recipe for a s'more appeared in the 1927 Girl Scout handbook. The name is believed to be a contraction of the phrase \"some more.\" More than half of all marshmallows sold during the summer are toasted over a fire, often to make this iconic campfire treat." },
+];
 </script>
-  <template>
-    <client-only>
-      <div ref="modelContainer" class="model-container"></div>
-      <main class="scroll-content">
-          <section class="content-section-title">
-              <h2>MarshMalloW</h2>
-          </section>
-          <section class="content-section section-1">
-              <div class="content one">
-                  <h2>A Treat for Royalty</h2>
-                  <span class="span1">The history of marshmallows dates back to ancient Egypt around 2000 B.C. The treat was made by extracting sap from the mallow plant and mixing it with honey and nuts.</span>
-              </div>
-          </section>
-          <section class="content-section section-2">
-              <div class="content one">
-                  <h2>From Marsh Plant to Modern Sweet</h2>
-                  <span class="span2">The name "marshmallow" comes from the mallow plant (Althaea officinalis), which grows wild in marshes. Originally, the key ingredient was the sap from this plant's root.</span>
-              </div>
-          </section>
-          <section class="content-section section-3">
-              <div class="content one">
-                  <h2>A French Makeover</h2>
-                  <span class="span3">In the 1800s, French confectioners began whipping the mallow root sap with sugar and egg whites to create a fluffy, molded candy called Pâte de Guimauve.</span>
-              </div>
-          </section>
-          <section class="content-section section-4">
-              <div class="content two">
-                  <h2>An American Invention</h2>
-                  <span class="span4">The mass production of marshmallows was revolutionized in 1948 by an American, Alex Doumak. He invented and patented the extrusion process, where the marshmallow mixture is pushed through tubes, cut into pieces, cooled, and packaged.</span>
-              </div>
-          </section>
-          <section class="content-section section-5">
-              <div class="content one">
-                  <h2>Mostly Air</h2>
-                  <span class="span5">Marshmallows are a type of foam, consisting of about 50% air. The four main ingredients are sugar, water, air, and a whipping agent like gelatin.</span>
-              </div>
-          </section>
-          <section class="content-section section-6">
-              <div class="content two">
-                  <h2>The "S'more" Story</h2>
-                  <span class="span6">The first documented recipe for a s'more appeared in the 1927 Girl Scout handbook. The name is believed to be a contraction of the phrase "some more." More than half of all marshmallows sold during the summer are toasted over a fire, often to make this iconic campfire treat.</span>
-              </div>
-          </section>
-          <section class="content-section section-7">
-            <carousel-three />
-          </section>
-      </main>
-    </client-only>
-  </template>
+<template>
+  <client-only>
+    <div ref="modelContainer" class="model-container"></div>
+    <main class="scroll-content">
+        <section class="content-section-title"><h2>MarshMalloW</h2></section>
+        <section v-for="text in texts" :key="text.section" class="content-section" :class="text.section">
+          <div class="content" :class="text.classMain">
+            <h2>{{ text.header }}</h2>
+            <span :class="text.class">{{ text.text }}</span>
+          </div>
+        </section>
+        <section class="content-section section-7"><carousel-three/></section>
+    </main>
+  </client-only>
+</template>
 <style scoped>
-
 .model-container {
   position: fixed;
   top: 0;
@@ -270,16 +210,13 @@ onBeforeUnmount(() => {
     right: auto;
     width:100%; /* Take up most of the screen width */
   }
-
   .content-section-title {
     font-size: 2rem; /* Make the main title smaller */
     padding: 15px 0;
   }
-  
   .content-section h2 {
     font-size: 2.5rem; /* Reduce section titles */
   }
-  
   .content span {
     font-size: 1.1rem; /* Make the body text much more readable */
     line-height: 1.6; /* Increase line height for small text */

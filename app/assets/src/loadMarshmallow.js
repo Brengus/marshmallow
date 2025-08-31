@@ -1,6 +1,6 @@
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import * as THREE from 'three';
-export function loadMarshmallow(scene,model){
+export function loadMarshmallow(scene, model) {
     const mainLight = new THREE.DirectionalLight(0xFFF8E7, 3.0); // A bright, slightly warm white
     mainLight.position.set(5, 10, 7.5); // High and to the side, like a morning sun
     mainLight.castShadow = true;
@@ -38,5 +38,5 @@ export function loadMarshmallow(scene,model){
     shadowCatcher.position.y = -2;
     shadowCatcher.receiveShadow = true;
     scene.add(shadowCatcher);
-    
+
 }
