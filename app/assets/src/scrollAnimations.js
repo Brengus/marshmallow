@@ -152,8 +152,8 @@ export function setupScrollAnimations(model) {
                 }
             });
             gsap.to(model.rotation, {
-                z: Math.PI * 4,
-                y: Math.PI * 4,
+                z: Math.PI * 5,
+                y: Math.PI * 5,
                 ease: "power1.inOut",
                 scrollTrigger: {
                     trigger: ".section-6",
@@ -163,12 +163,12 @@ export function setupScrollAnimations(model) {
                 }
             });
             gsap.to(model.position, {
-                x: -3,
+                x: -5,
                 y: 0,
                 scrollTrigger: {
                     trigger: ".section-6",
                     start: "top bottom",
-                    end: "bottom top",
+                    end: "bottom 80%",
                     scrub: 1,
                 }
             });

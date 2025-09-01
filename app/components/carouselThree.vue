@@ -5,7 +5,6 @@ import { KTX2Loader } from 'three/examples/jsm/loaders/KTX2Loader.js';
 import { MeshoptDecoder } from 'three/examples/jsm/libs/meshopt_decoder.module.js';
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import gsap from 'gsap';
-
 const container = ref(null);
 let scene, camera, renderer, carouselGroup, animationId;
 const models = ref([]);
@@ -13,7 +12,6 @@ const currentIndex = ref(0);
 const isAnimating = ref(false);
 const prevSlide = () => goToSlide(-1);
 const nextSlide = () => goToSlide(1);
-
 const goToSlide = (direction) => {
   if (isAnimating.value || models.value.length < 2) return;
   isAnimating.value = true;
@@ -161,8 +159,7 @@ const onWindowResize = () => {
     renderer.setSize(window.innerWidth, window.innerHeight);
   }
 }
-onMounted(async () => {
-  await nextTick();
+onMounted(() => {
   if (container.value) {
     init();
     animate(); // Start the animation loop
@@ -178,7 +175,6 @@ onBeforeUnmount(() => {
 });
 </script>
 <template>
-  <client-only>
     <div class="background">
       <div class="element-one"></div>
       <div class="element-two"></div>
@@ -195,7 +191,6 @@ onBeforeUnmount(() => {
         </button>
       </div>
     </div>
-  </client-only>
 </template>
 <style scoped>
 :global(html), :global(body) {

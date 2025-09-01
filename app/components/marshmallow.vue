@@ -13,7 +13,8 @@ import { loadMarshmallow } from '@/assets/src/loadMarshmallow.js';
 const modelContainer = ref(null);
 let scene, camera, renderer, model, animationId, modelGroup;
 const clock = new THREE.Clock();
-const initThree = () => {
+const initThree = async () => {
+  if(!modelContainer.value) return;
   scene = new THREE.Scene();
   camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
   camera.position.z = 5;
@@ -49,7 +50,10 @@ const initThree = () => {
     ScrollTrigger.create({trigger: ".section-7",start: "20% bottom", onEnter: () => {modelGroup.visible = false},onLeaveBack: () => {modelGroup.visible = true}});
     ScrollTrigger.refresh();
   }, undefined, (error) => {console.error("An error happened while loading the model:", error)});
-  loadMarshmallow(scene,model);  
+  loadMarshmallow(scene,model);
+  if(window.innerWidth < 768) ScrollTrigger.normalizeScroll({ allowNestedScroll: true, lockAxis: false });
+  animate();
+  window.addEventListener('resize', onWindowResize);
 }
 const animate = () => {
   animationId = requestAnimationFrame(animate);
@@ -64,15 +68,9 @@ const onWindowResize = () => {
   camera.updateProjectionMatrix();
   renderer.setSize(window.innerWidth, window.innerHeight);
 }
-onMounted(async () => {
-  await nextTick();
-  if (modelContainer.value) {
-    gsap.registerPlugin(ScrollTrigger,SplitText);
-    if(window.innerWidth < 768) ScrollTrigger.normalizeScroll({ allowNestedScroll: true, lockAxis: false });
-    initThree();
-    animate();
-    window.addEventListener('resize', onWindowResize);
-  }
+onMounted(() => {
+  initThree();
+  gsap.registerPlugin(ScrollTrigger,SplitText);  
 });
 onBeforeUnmount(() => {
   if (animationId) cancelAnimationFrame(animationId);
@@ -90,8 +88,8 @@ const texts = [
 ];
 </script>
 <template>
+  <div ref="modelContainer" class="model-container"></div>
   <client-only>
-    <div ref="modelContainer" class="model-container"></div>
     <main class="scroll-content">
         <section class="content-section-title"><h2>MarshMalloW</h2></section>
         <section v-for="text in texts" :key="text.section" class="content-section" :class="text.section">
